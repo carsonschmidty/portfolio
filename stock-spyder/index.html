@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Spyder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div id="root"></div>
+  <script>
+    const { useState } = React;
+    function Sidebar({ current, setCurrent }) {
+      const items = ['Dashboard', 'Inventory List', 'Orders'];
+      return React.createElement('div', { className: 'w-44 h-screen bg-purple-200 p-4' },
+        items.map(item =>
+          React.createElement('div', {
+            key: item,
+            className: `p-2 my-2 rounded cursor-pointer ${current===item?'bg-purple-300':''}`,
+            onClick: () => setCurrent(item)
+          }, item)
+        )
+      );
+    }
+    function Card({ color, children }) {
+      return React.createElement('div', {
+        className: `rounded-xl h-24 flex items-center justify-center text-xl font-bold`,
+        style: { backgroundColor: color }
+      }, children);
+    }
+    function Dashboard() {
+      return React.createElement('div', null,
+        React.createElement('div', { className: 'grid grid-cols-4 gap-4 my-4' },
+          React.createElement(Card, { color: '#B3E5FC' }, 'Card 1'),
+          React.createElement(Card, { color: '#F8BBD0' }, 'Card 2'),
+          React.createElement(Card, { color: '#C8E6C9' }, 'Card 3'),
+          React.createElement(Card, { color: '#FFF9C4' }, 'Card 4'),
+        ),
+        React.createElement('div', { className: 'bg-white rounded-2xl p-4 mt-4' },
+          React.createElement('h2', { className: 'font-bold text-lg mb-2' }, 'Recent Activity'),
+          ['#B3E5FC','#F8BBD0','#C8E6C9'].map((c,i) =>
+            React.createElement('div', { key:i, className:'rounded my-2 h-10', style:{backgroundColor:c}})
+          )
+        )
+      );
+    }
+    function InventoryList() {
+      return React.createElement('div', null,
+        React.createElement('div', { className: 'flex my-4' },
+          React.createElement('input', { className: 'flex-1 rounded-lg p-2', placeholder:'Search...'}),
+          React.createElement('button', { className:'ml-4 bg-green-100 rounded-lg px-4' }, '+ Add Product')
+        ),
+        React.createElement('div', { className:'bg-white rounded-2xl p-4' },
+          React.createElement('div', { className:'grid grid-cols-5 bg-yellow-100 rounded p-2 font-bold' },
+            ['Product','SKU','Stock','Category','Actions'].map(h=>React.createElement('div',{key:h},h))
+          ),
+          ['#B3E5FC','#F8BBD0','#C8E6C9'].map((c,i)=>
+            React.createElement('div',{key:i,className:'grid grid-cols-5 my-2 rounded h-10 items-center',style:{backgroundColor:c}},
+              React.createElement('div',null,'Item ',i+1),React.createElement('div',null,'SKU'),React.createElement('div',null,'0'),React.createElement('div',null,'Cat'),React.createElement('div',null,'Edit')
+            )
+          )
+        )
+      );
+    }
+    function Orders() {
+      return React.createElement('div', null,
+        React.createElement('div', { className: 'flex my-4' },
+          React.createElement('input', { className: 'flex-1 rounded-lg p-2', placeholder:'Search...'}),
+          React.createElement('button', { className:'ml-4 bg-pink-200 rounded-lg px-4' }, 'Search/Filter')
+        ),
+        React.createElement('div', { className:'bg-white rounded-2xl p-4' },
+          React.createElement('div', { className:'grid grid-cols-6 bg-yellow-100 rounded p-2 font-bold' },
+            ['#','Customer','Items','Status','Date','Details'].map(h=>React.createElement('div',{key:h},h))
+          ),
+          ['#B3E5FC','#F8BBD0','#C8E6C9'].map((c,i)=>
+            React.createElement('div',{key:i,className:'grid grid-cols-6 my-2 rounded h-10 items-center',style:{backgroundColor:c}},
+              React.createElement('div',null,i+1),React.createElement('div',null,'Name'),React.createElement('div',null,'1'),React.createElement('div',null,'Pending'),React.createElement('div',null,'Today'),React.createElement('div',null,'View')
+            )
+          )
+        )
+      );
+    }
+    function App() {
+      const [page,setPage] = useState('Dashboard');
+      return React.createElement('div', { className: 'flex' },
+        React.createElement(Sidebar, { current: page, setCurrent: setPage }),
+        React.createElement('div', { className: 'flex-1 p-8' },
+          page==='Dashboard' ? React.createElement(Dashboard) : null,
+          page==='Inventory List' ? React.createElement(InventoryList) : null,
+          page==='Orders' ? React.createElement(Orders) : null
+        )
+      );
+    }
+    ReactDOM.render(React.createElement(App), document.getElementById('root'));
+  </script>
+</body>
+</html>
